@@ -42,6 +42,6 @@ function Game(gameId, userId = null) {
   this.rounds = [];
   this.completed = false;
   this.totalScore = 0;
-  this.startedAt = dayjs().format('h:m:s-DD/MM/YYYY');
+  this.startedAt = dayjs().format('HH:mm:ss-DD/MM/YYYY');
   this.completedAt = null;
 }
