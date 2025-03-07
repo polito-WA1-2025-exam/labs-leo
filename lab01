@@ -1,0 +1,31 @@
+Main Objects
+
+1.Meme - represents a meme picture
+memeId: unique identifier
+imageUrl: URL to the meme image
+title: name/description of the meme
+
+2.Caption - represents a possible caption for memes
+captionId: unique identifier
+text: the caption text
+
+3.MemeCaption - represents the association between a meme and its right captions
+memeId: reference to a meme
+captionId: reference to a caption
+points: points awarded (0,1, 2, or 3)
+
+4.Game - represents a game session
+id: unique identifier
+userId: identifier of the user playing (null for anonymous)
+rounds: array of Round objects
+completed: boolean indicating if the game is completed
+totalScore: sum of points from all rounds
+startedAt: timestamp when the game started
+completedAt: timestamp when the game ended
+
+5.Round - represents a round in a game
+memeId: identifier of the meme for this round
+selectedCaptionId: identifier of the caption selected by the player
+availableCaptions: array of caption ids presented to the player
+points: points awarded for the selection
+completed: boolean indicating if the round is completed
