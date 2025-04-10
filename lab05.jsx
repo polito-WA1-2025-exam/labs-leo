@@ -70,3 +70,66 @@ function App() {
 }
 
 export default App;
+
+
+
+
+// components/Navigation.jsx
+import { useContext } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { Navbar, Container, Nav, Button } from 'react-bootstrap';
+import AuthContext from '../contexts/AuthContext';
+
+function Navigation() {
+  const location = useLocation();
+  const { user, logout } = useContext(AuthContext);
+  
+  return (
+    <Navbar bg="primary" variant="dark" expand="lg">
+      <Container>
+        <Navbar.Brand as={Link} to="/">
+          <i className="bi bi-emoji-laughing me-2"></i>
+          MemeGame
+        </Navbar.Brand>
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse id="basic-navbar-nav">
+          <Nav className="me-auto">
+            <Nav.Link 
+              as={Link} 
+              to="/" 
+              active={location.pathname === '/'}
+            >
+              Play
+            </Nav.Link>
+            {user && (
+              <>
+                <Nav.Link 
+                  as={Link} 
+                  to="/history" 
+                  active={location.pathname === '/history'}
+                >
+                  History
+                </Nav.Link>
+                <Nav.Link 
+                  as={Link} 
+                  to="/create" 
+                  active={location.pathname === '/create'}
+                >
+                  Create
+                </Nav.Link>
+              </>
+            )}
+          </Nav>
+          <div className="d-flex">
+            {user ? (
+              <>
+                <span className="text-light d-flex align-items-center me-3">
+                  <i className="bi bi-person-circle me-1"></i>
+                  {user.username}
+                </span>
+                <Button variant="outline-light" onClick={logout}>
+                  Logout
+                </Button>
+              </>
+            ) : (
+              <>
