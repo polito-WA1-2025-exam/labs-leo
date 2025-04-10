@@ -1,0 +1,59 @@
+-- Users table
+CREATE TABLE "users" (
+  "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+  "username" TEXT NOT NULL UNIQUE,
+  "email" TEXT NOT NULL UNIQUE,
+  "password" TEXT NOT NULL, -- Hashed password
+  "created_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Memes table
+CREATE TABLE "memes" (
+  "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+  "image_url" TEXT NOT NULL,
+  "created_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Captions table
+CREATE TABLE "captions" (
+  "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+  "text" TEXT NOT NULL UNIQUE,
+  "created_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- MemeCaption relationship table
+CREATE TABLE "meme_captions" (
+  "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+  "meme_id" INTEGER NOT NULL,
+  "caption_id" INTEGER NOT NULL,
+  "points" INTEGER NOT NULL CHECK(points IN (1, 2, 3)),
+  "created_by" INTEGER, -- User who created this association
+  "created_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY(meme_id) REFERENCES memes(id) ON DELETE CASCADE,
+  FOREIGN KEY(caption_id) REFERENCES captions(id) ON DELETE CASCADE,
+  FOREIGN KEY(created_by) REFERENCES users(id),
+  UNIQUE(meme_id, caption_id)
+);
+
+-- Games table
+CREATE TABLE "games" (
+  "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+  "user_id" INTEGER NOT NULL,
+  "date_time" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  "completed" BOOLEAN DEFAULT 0,
+  "total_score" INTEGER DEFAULT 0,
+  FOREIGN KEY(user_id) REFERENCES users(id)
+);
+
+-- Rounds table
+CREATE TABLE "rounds" (
+  "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+  "game_id" INTEGER NOT NULL,
+  "meme_id" INTEGER NOT NULL,
+  "selected_caption_id" INTEGER,
+  "score" INTEGER DEFAULT 0,
+  "round_number" INTEGER NOT NULL,
+  FOREIGN KEY(game_id) REFERENCES games(id) ON DELETE CASCADE,
+  FOREIGN KEY(meme_id) REFERENCES memes(id),
+  FOREIGN KEY(selected_caption_id) REFERENCES captions(id)
+);
