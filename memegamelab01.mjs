@@ -1,248 +1,116 @@
-//import dayjs library for handle dates
-import dayjs from 'dayjs'
-
-// ------------- Constructor Functions -------------
-
-// Meme
-function Meme(memeId, imageUrl, title) {
-  this.memeId = memeId;
+// Meme constructor
+function Meme(id, imageUrl) {
+  this.id = id;
   this.imageUrl = imageUrl;
-  this.title = title;
 }
 
-// Caption
-function Caption(captionId, captiontext) {
-  this.captionId = captionId;
-  this.captiontext = captiontext;
+// Caption constructor
+function Caption(id, text) {
+  this.id = id;
+  this.text = text;
 }
 
-// MemeCaption
-function MemeCaption(memeId, captionId, points) {
-  if (![1, 2, 3].includes(points)) {
-    throw new Error('Points must be 1, 2, or 3');
-  }
+// MemeCaption constructor (relationship)
+function MemeCaption(id, memeId, captionId, points) {
+  this.id = id;
   this.memeId = memeId;
   this.captionId = captionId;
-  this.points = points;
+  this.points = points; // 1, 2, or 3
 }
 
-// Round
-function Round(memeId, availableCaptions) {
-  this.memeId = memeId;
-  this.availableCaptions = availableCaptions;
-  this.selectedCaptionId = null;
-  this.points = 0;
-  this.completed = false;
-}
-
-// Game
-function Game(gameId, userId = null) {
-  this.gameId = gameId;
+// Game constructor
+function Game(id, userId, dateTime, completed = false, totalScore = 0) {
+  this.id = id;
   this.userId = userId;
-  this.rounds = [];
-  this.completed = false;
-  this.totalScore = 0;
-  this.startedAt = dayjs().format('HH:mm:ss-DD/MM/YYYY');
-  this.completedAt = null;
+  this.dateTime = dateTime;
+  this.completed = completed;
+  this.totalScore = totalScore;
+  this.rounds = []; // Collection of Round objects
 }
 
-// ------------- Collection Objects -------------
+// Round constructor
+function Round(id, gameId, memeId, selectedCaptionId, score = 0) {
+  this.id = id;
+  this.gameId = gameId;
+  this.memeId = memeId;
+  this.selectedCaptionId = selectedCaptionId;
+  this.score = score;
+}
 
-// MemeCollection
-function MemeCollection() {
-  this.memes = [];
+// User constructor
+function User(id, username, email, password) {
+  this.id = id;
+  this.username = username;
+  this.email = email;
+  this.password = password; // Will be hashed in actual implementation
+}
 
-  // Add a new meme to the collection
-  this.addMeme = function(meme) {
-    if (!(meme instanceof Meme)) {
-      throw new Error('Only Meme objects can be added to MemeCollection');
-    }
-    if (this.getMemeById(meme.memeId)) {
-      throw new Error(`Meme with ID ${meme.memeId} already exists`);
-    }
-    this.memes.push(meme);
-    return meme;
-  };
-
-  // Get a meme by its ID
-  this.getMemeById = function(memeId) {
-    return this.memes.find(meme => meme.memeId === memeId);
-  };
-
-  // Get all memes
-  this.getAllMemes = function() {
+// Collection management for Memes
+const MemeCollection = {
+  memes: [],
+  
+  addMeme(imageUrl) {
+    const id = this.memes.length ? Math.max(...this.memes.map(m => m.id)) + 1 : 1;
+    const newMeme = new Meme(id, imageUrl);
+    this.memes.push(newMeme);
+    return newMeme;
+  },
+  
+  getMemeById(id) {
+    return this.memes.find(m => m.id === id);
+  },
+  
+  getAllMemes() {
     return [...this.memes];
-  };
-
-  // Get random meme
-  this.getRandomMeme = function() {
-    if (this.memes.length === 0) return null;
-    const randomIndex = Math.floor(Math.random() * this.memes.length);
-    return this.memes[randomIndex];
-  };
-
-  // Delete a meme by its ID
-  this.deleteMeme = function(memeId) {
-    const initialLength = this.memes.length;
-    this.memes = this.memes.filter(meme => meme.memeId !== memeId);
-    return initialLength !== this.memes.length;
-  };
-}
-
-// CaptionCollection
-function CaptionCollection() {
-  this.captions = [];
-
-  // Add a new caption to the collection
-  this.addCaption = function(caption) {
-    if (!(caption instanceof Caption)) {
-      throw new Error('Only Caption objects can be added to CaptionCollection');
+  },
+  
+  deleteMeme(id) {
+    const index = this.memes.findIndex(m => m.id === id);
+    if (index !== -1) {
+      this.memes.splice(index, 1);
+      return true;
     }
-    if (this.getCaptionById(caption.captionId)) {
-      throw new Error(`Caption with ID ${caption.captionId} already exists`);
-    }
-    this.captions.push(caption);
-    return caption;
-  };
+    return false;
+  }
+};
 
-  // Get a caption by its ID
-  this.getCaptionById = function(captionId) {
-    return this.captions.find(caption => caption.captionId === captionId);
-  };
+// Caption collection with similar functions
+const CaptionCollection = {
+  captions: [],
+  
+  addCaption(text) {
+    const id = this.captions.length ? Math.max(...this.captions.map(c => c.id)) + 1 : 1;
+    const newCaption = new Caption(id, text);
+    this.captions.push(newCaption);
+    return newCaption;
+  },
+  
+  // Other methods similar to MemeCollection
+};
 
-  // Get all captions
-  this.getAllCaptions = function() {
-    return [...this.captions];
-  };
-
-  // Get random captions
-  this.getRandomCaptions = function(count) {
-    if (this.captions.length < count) return this.captions;
+// MemeCaption collection for relationships
+const MemeCaptionCollection = {
+  memeCaption: [],
+  
+  addMemeCaption(memeId, captionId, points) {
+    if (points < 1 || points > 3) throw new Error("Points must be 1, 2, or 3");
     
-    const shuffled = [...this.captions].sort(() => 0.5 - Math.random());
-    return shuffled.slice(0, count);
-  };
+    const id = this.memeCaption.length ? Math.max(...this.memeCaption.map(mc => mc.id)) + 1 : 1;
+    const newMC = new MemeCaption(id, memeId, captionId, points);
+    this.memeCaption.push(newMC);
+    return newMC;
+  },
+  
+  getCaptionsForMeme(memeId) {
+    return this.memeCaption.filter(mc => mc.memeId === memeId);
+  },
+  
+  getPointsForMemeCaption(memeId, captionId) {
+    const mc = this.memeCaption.find(mc => mc.memeId === memeId && mc.captionId === captionId);
+    return mc ? mc.points : 0;
+  },
+  
+  // Other methods for managing relationships
+};
 
-  // Delete a caption by its ID
-  this.deleteCaption = function(captionId) {
-    const initialLength = this.captions.length;
-    this.captions = this.captions.filter(caption => caption.captionId !== captionId);
-    return initialLength !== this.captions.length;
-  };
-}
-
-// MemeCaptionCollection
-function MemeCaptionCollection() {
-  this.memeCaptions = [];
-
-  // Add a new meme-caption association
-  this.addMemeCaption = function(memeCaption) {
-    if (!(memeCaption instanceof MemeCaption)) {
-      throw new Error('Only MemeCaption objects can be added to MemeCaptionCollection');
-    }
-    
-    // Check if this meme already has 3 captions with points 1, 2, and 3
-    const existingAssociations = this.getMemeCaptionsByMemeId(memeCaption.memeId);
-    
-    // Check if this meme already has a caption with the same points
-    const hasPointsAlready = existingAssociations.some(mc => mc.points === memeCaption.points);
-    if (hasPointsAlready) {
-      throw new Error(`Meme ID ${memeCaption.memeId} already has a caption with ${memeCaption.points} points`);
-    }
-    
-    // Check if this exact association already exists
-    const existingAssociation = this.memeCaptions.find(
-      mc => mc.memeId === memeCaption.memeId && mc.captionId === memeCaption.captionId
-    );
-    if (existingAssociation) {
-      throw new Error('This meme-caption association already exists');
-    }
-    
-    this.memeCaptions.push(memeCaption);
-    return memeCaption;
-  };
-
-  // Get all meme-caption associations for a specific meme
-  this.getMemeCaptionsByMemeId = function(memeId) {
-    return this.memeCaptions.filter(mc => mc.memeId === memeId);
-  };
-
-  // Get all meme-caption associations for a specific caption
-  this.getMemeCaptionsByCaptionId = function(captionId) {
-    return this.memeCaptions.filter(mc => mc.captionId === captionId);
-  };
-
-  // Get the points for a specific meme-caption pair
-  this.getPointsForMemeCaption = function(memeId, captionId) {
-    const association = this.memeCaptions.find(
-      mc => mc.memeId === memeId && mc.captionId === captionId
-    );
-    return association ? association.points : 0;
-  };
-
-  // Get the correct captions for a meme
-  this.getCorrectCaptionsForMeme = function(memeId, captionCollection) {
-    const associations = this.getMemeCaptionsByMemeId(memeId);
-    return associations.map(assoc => {
-      const caption = captionCollection.getCaptionById(assoc.captionId);
-      return {
-        ...caption,
-        points: assoc.points
-      };
-    });
-  };
-
-  // Delete a meme-caption association
-  this.deleteMemeCaption = function(memeId, captionId) {
-    const initialLength = this.memeCaptions.length;
-    this.memeCaptions = this.memeCaptions.filter(
-      mc => !(mc.memeId === memeId && mc.captionId === captionId)
-    );
-    return initialLength !== this.memeCaptions.length;
-  };
-}
-
-// GameCollection
-function GameCollection() {
-  this.games = [];
-
-  // Add a new game to the collection
-  this.addGame = function(game) {
-    if (!(game instanceof Game)) {
-      throw new Error('Only Game objects can be added to GameCollection');
-    }
-    if (this.getGameById(game.gameId)) {
-      throw new Error(`Game with ID ${game.gameId} already exists`);
-    }
-    this.games.push(game);
-    return game;
-  };
-
-  // Get a game by its ID
-  this.getGameById = function(gameId) {
-    return this.games.find(game => game.gameId === gameId);
-  };
-
-  // Get all games for a specific user
-  this.getGamesByUserId = function(userId) {
-    return this.games.filter(game => game.userId === userId);
-  };
-
-  // Get completed games for a specific user
-  this.getCompletedGamesByUserId = function(userId) {
-    return this.games.filter(game => game.userId === userId && game.completed);
-  };
-
-  // Get total score for a user across all completed games
-  this.getTotalScoreForUser = function(userId) {
-    return this.getCompletedGamesByUserId(userId)
-      .reduce((total, game) => total + game.totalScore, 0);
-  };
-
-  // Delete a game by its ID
-  this.deleteGame = function(gameId) {
-    const initialLength = this.games.length;
-    this.games = this.games.filter(game => game.gameId !== gameId);
-    return initialLength !== this.games.length;
-  };
-}
+// Game and Round collections with similar structures
