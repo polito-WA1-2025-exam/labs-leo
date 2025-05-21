@@ -1,5 +1,5 @@
 
-# Exam #N: "MEME GAME"
+## MEME GAME
 ## Student: s337544 RAHMATI SHADMEHR
 
 ## Start
