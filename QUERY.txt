@@ -1,0 +1,53 @@
+GET RANDOM MEME, IF 3 ROUND NOT SELECT THE PREVIOUS MEME
+
+    SELECT * FROM memes WHERE meme_id NOT IN (?) ORDER BY RANDOM() LIMIT 1
+
+GET ALL CAPTIONS IN ONE QUERY
+    SELECT * FROM (
+        SELECT * FROM (SELECT * FROM captions WHERE meme_id != 1 ORDER BY RANDOM() LIMIT 5)
+        UNION
+        SELECT * FROM (SELECT * FROM captions WHERE meme_id = 1 ORDER BY RANDOM() LIMIT 2)
+    )
+    ORDER BY RANDOM()
+
+
+
+
+INSERT NEW USER
+
+    INSERT INTO users (user_name, user_email, user_pass, user_salt, user_points) VALUES (?,?,?,?,0)
+
+UPDATE USER POINT AFTER 3 matches
+
+    UPDATE users SET user_points = user_points + ? WHERE user_id = ?
+
+
+
+INSERT NEW MATCH
+
+    INSERT INTO matches (user_id, match_details, match_points) VALUES (?, '', 0)
+
+UPDATE MATCH match_details
+
+    UPDATE matches SET match_details = ?, match_points = match_points + ? WHERE match_id = ?
+
+GET MATCH match_details
+
+    SELECT match_details FROM matches WHERE match_id = ?
+
+GET MATCH POINTS
+
+    SELECT match_points FROM matches WHERE match_id = ?
+
+
+
+GET History OF user
+
+    SELECT match_details FROM matches WHERE user_id = ?
+
+GET POint of User
+    SELECT user_points FROM users WHERE user_id = ?
+
+GET Match History from match_id 
+    SELECT * FROM matches WHERE match_id = ?
+

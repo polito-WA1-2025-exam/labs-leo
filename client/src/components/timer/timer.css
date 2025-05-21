@@ -1,0 +1,110 @@
+.timer-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+.timer-box {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background-color: #3b82f6;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.8rem;
+  font-weight: bold;
+  box-shadow: 0 6px 16px rgba(59, 130, 246, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.timer-box::before {
+  content: \"\";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 50%;
+  border: 4px solid rgba(255, 255, 255, 0.3);
+}
+
+.timer-box::after {
+  content: \"\";
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  right: 5px;
+  bottom: 5px;
+  border-radius: 50%;
+  border: 2px dashed rgba(255, 255, 255, 0.5);
+  animation: rotate 30s linear infinite;
+}
+
+@keyframes rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.timer-box.warning {
+  background-color: #f59e0b;
+  box-shadow: 0 6px 16px rgba(245, 158, 11, 0.3);
+  animation: pulse 1s infinite;
+}
+
+.timer-box.danger {
+  background-color: #ef4444;
+  box-shadow: 0 6px 16px rgba(239, 68, 68, 0.3);
+  animation: shake 0.5s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-2px); }
+  40%, 80% { transform: translateX(2px); }
+}
+
+/* Timer progress circle */
+.timer-progress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+
+.timer-progress svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.timer-progress-circle {
+  fill: none;
+  stroke-width: 8;
+  stroke-linecap: round;
+  transform: translate(4px, 4px);
+}
+
+.timer-progress-background {
+  stroke: rgba(255, 255, 255, 0.2);
+}
+
+.timer-progress-value {
+  stroke: white;
+  transition: stroke-dashoffset 1s linear;
+}
+
+.timer-text {
+  position: relative;
+  z-index: 10;
+}

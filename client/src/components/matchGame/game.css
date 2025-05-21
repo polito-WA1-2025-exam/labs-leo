@@ -1,0 +1,295 @@
+.game-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  padding: var(--space-xl);
+  max-width: 1200px;
+  margin: 0 auto;
+  min-height: 80vh;
+}
+
+.game-title {
+  padding: var(--space-xl) 0;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin-bottom: var(--space-md);
+  text-align: center;
+  position: relative;
+}
+
+.game-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 4px;
+  background-color: var(--color-primary);
+  border-radius: 4px;
+}
+
+.meme-container {
+  width: 100%;
+  max-width: 450px;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  background-color: white;
+  margin: 0 auto;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.meme-container:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+}
+
+.meme-container img {
+  width: 100%;
+  height: 300px;
+  object-fit: contain;
+  display: block;
+}
+
+.captions-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  align-items: stretch;
+  padding: var(--space-md);
+}
+
+.captions-container button {
+  text-align: left;
+  width: 100%;
+  padding: var(--space-lg);
+  background-color: white;
+  border: 1px solid #dee2e6;
+  border-radius: var(--radius-lg);
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--color-text);
+  transition: all var(--transition);
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  overflow: hidden;
+}
+
+.captions-container .hover:hover {
+  background: #f2f7ff;
+  border: 1px solid var(--color-primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.green-class {
+  background: #d1fae5 !important;
+  border: 1px solid var(--color-success) !important;
+  color: var(--color-success) !important;
+  animation: correctAnswer 0.6s ease;
+}
+
+.red-class {
+  background: #fee2e2 !important;
+  border: 1px solid var(--color-danger) !important;
+  color: var(--color-danger) !important;
+  animation: wrongAnswer 0.6s ease;
+}
+
+@keyframes correctAnswer {
+  0% { transform: scale(1); box-shadow: 0 0 0 rgba(46, 204, 113, 0); }
+  50% { transform: scale(1.05); box-shadow: 0 0 20px rgba(46, 204, 113, 0.4); }
+  100% { transform: scale(1); box-shadow: 0 0 0 rgba(46, 204, 113, 0); }
+}
+
+@keyframes wrongAnswer {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-5px); }
+  40%, 80% { transform: translateX(5px); }
+}
+
+/* Feedback animation */
+.caption-feedback {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 5px 10px;
+  color: white;
+  border-radius: 0 var(--radius-lg) 0 var(--radius-lg);
+  font-weight: bold;
+  font-size: 0.8rem;
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: all 0.3s ease;
+}
+
+.caption-feedback.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.caption-feedback.correct {
+  background-color: var(--color-success);
+}
+
+.caption-feedback.incorrect {
+  background-color: var(--color-danger);
+}
+
+.btn-selected {
+  border: 2px solid var(--color-primary) !important;
+}
+
+.resume-points {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-success);
+  margin-bottom: var(--space-lg);
+  height: 2rem;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.5s ease;
+}
+
+.resume-points:not(:empty) {
+  opacity: 1;
+  transform: translateY(0);
+  animation: bouncePoints 0.8s ease;
+}
+
+@keyframes bouncePoints {
+  0% { transform: scale(0.8); opacity: 0; }
+  50% { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.side-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-lg);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .game-title {
+    font-size: 2rem;
+    padding: var(--space-lg) 0;
+  }
+  
+  .meme-container {
+    width: 100%;
+  }
+  
+  .captions-container button {
+    padding: var(--space-md);
+  }
+}
+
+/* Loading state */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 400px;
+}
+
+.loading-spinner {
+  width: 60px;
+  height: 60px;
+  border: 5px solid rgba(67, 97, 238, 0.2);
+  border-radius: 50%;
+  border-top-color: var(--color-primary);
+  animation: spin 1s linear infinite;
+  margin-bottom: var(--space-md);
+}
+
+.loading-text {
+  font-size: 1.2rem;
+  color: var(--color-primary);
+  margin-top: var(--space-md);
+  position: relative;
+}
+
+.loading-text:after {
+  content: '...';
+  position: absolute;
+  animation: loadingDots 1.5s infinite;
+}
+
+@keyframes loadingDots {
+  0% { content: '.'; }
+  33% { content: '..'; }
+  66% { content: '...'; }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Round transition animation */
+.round-transition {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+
+.round-transition.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.round-transition-content {
+  font-size: 3rem;
+  font-weight: 800;
+  color: var(--color-primary);
+  text-align: center;
+  animation: roundScale 1s ease;
+}
+
+@keyframes roundScale {
+  0% { transform: scale(0.5); opacity: 0; }
+  50% { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* Help button */
+.help-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: var(--color-primary);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  z-index: 100;
+}
+
+.help-button:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+}

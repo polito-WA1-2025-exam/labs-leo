@@ -1,0 +1,27 @@
+//////////////// MATCH //////////////////////
+
+GET "/api/round/single"   ==> No login required, return 1 meme + 7 captions
+
+GET "api/round/:id"      ==> Login required, :id is the round number
+                              In req.body they is array of old id memes of the match, this ids has to be excluded from the search of the meme + captions
+                              At the first round generate the MATCH_ID in order to store the match in the DB.
+                              IF :id === 3 ==> set last_round: true;
+
+
+GET "api/history/:id"       ==> Login required,
+                            Return the json of all the matches played by the logged user.
+
+POST "/api/createMatch"     ==> Login required,
+                                Insert a new row in table matches with all the match details of the user, called only if complete 3 rounds
+                                Update the total user points
+
+
+//////////////  LOGIN LOGOUT REGISTER ////////////////////////
+
+GET "api/sessions/current" ==> Get logged user info
+
+POST "api/sessions"        ==> Used for login user 
+
+POST "api/signup"          ==> Create new user and suddently login
+
+DELETE "api/sessions/current" ==> Used for logout and destroy the session

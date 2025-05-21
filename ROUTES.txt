@@ -1,0 +1,12 @@
+/         ==> Home, Show the button start game!
+
+/profile  ==> Show the user info + total score + history of matches
+
+/game         ==> Show the Game, composed by the clock the meme and the 7 captions
+
+/resume       ==> After the game end show the questions the best responses and my response,
+                  At the end of the page show button RESTART!
+
+/login        ==> Login form
+
+/register   ==> register form
