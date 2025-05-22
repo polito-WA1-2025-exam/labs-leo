@@ -101,9 +101,3 @@ After 3 rounds the client asks the server to save the game. If the game is succe
 - Table `matches` - Fields: {match_id, user_id, match_details, match_points}, match_details contains the 3 rounds played.
 - ...
 
-
-## Users Credentials
-
-- exam@polito.it, examexam
-- test@polito.it, testtest
-- tedi@polito.it, testtest
