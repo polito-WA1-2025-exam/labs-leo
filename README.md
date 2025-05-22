@@ -14,7 +14,6 @@
 - [API Documentation](#api-documentation)
 - [Database Schema](#database-schema)
 - [Project Structure](#project-structure)
-- [Screenshots](#screenshots)
 
 ## 🎯 Overview
 
@@ -281,15 +280,6 @@ CREATE TABLE matches (
 - **Morgan Logging**: HTTP request logging
 - **CORS Configuration**: Development environment setup
 - **Git Integration**: Version control with .gitignore
-
-## 📱 Screenshots
-
-*[Add screenshots of your application here]*
-
-- Home page with game start button
-- Game interface with timer and captions
-- User profile with game history
-- Post-game results summary
 
 ## 🚀 Future Enhancements
 
