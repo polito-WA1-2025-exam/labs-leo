@@ -19,6 +19,23 @@
 
 MEME GAME is a fun, interactive web application where players match captions to meme images. Players have 30 seconds to select the correct caption from 7 options. The game features both guest and registered player modes, with score tracking and game history for authenticated users.
 
+## 📸 Screenshots
+
+### Home Page
+![Home Page](screenshots/home.png)
+
+### Game Interface
+![Game Interface](screenshots/game.png)
+
+### Profile Page
+![Profile Page](screenshots/profile.png)
+
+### Login/Register
+![Authentication](screenshots/auth.png)
+
+### Game History
+![Game History](screenshots/history.png)
+
 ### 🌟 Key Features
 
 - **Two Game Modes**: 
